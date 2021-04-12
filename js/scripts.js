@@ -28,11 +28,11 @@ pokemonList[3] = {
 
 // Iterate over pokemonList, writing each Pokemon's name and height to the DOM
 for (let i = 0; i < pokemonList.length; i++) {
-    document.write(`${pokemonList[i].name} (height: ${pokemonList[i].height})`);
+    document.write(`<p>${pokemonList[i].name} (height: ${pokemonList[i].height})`);
     // Check to see if the Pokemon's height is greater than 1, and if it is print an extra statement
     if (pokemonList[i].height >= 1) {
         document.write(' - Wow, that\'s big!');
     }
-    // Final action in the loop is to print a new line so that each individual Pokemon is on a separate line
-    document.write('<br>');
+    // Final action in the loop is to close the paragraph for this entry
+    document.write('</p>');
 }
