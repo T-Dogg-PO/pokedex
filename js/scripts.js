@@ -1,30 +1,50 @@
-// Create a variable which will store a list of Pokemon (with corresponding data about that Pokemon)
-pokemonList = [];
+// Wrap Pokemon information in an IIFE
+let pokemonRepository = (function() {
+    // Within pokemonRepository, create the pokemonList array which will store a list of Pokemon (with corresponding data about that Pokemon)
+    let pokemonList = [];
 
-// Add sample data to the array to test basic functionality
-pokemonList[0] = {
-    name: 'Bulbasaur',
-    height: 0.7,
-    types: ['Grass', 'Poison']
-}
+    // Add sample data to the array to test basic functionality
+    pokemonList[0] = {
+        name: 'Bulbasaur',
+        height: 0.7,
+        types: ['Grass', 'Poison']
+    }
 
-pokemonList[1] = {
-    name: 'Charmander',
-    height: 0.6,
-    types: ['Fire']
-}
+    pokemonList[1] = {
+        name: 'Charmander',
+        height: 0.6,
+        types: ['Fire']
+    }
 
-pokemonList[2] = {
-    name: 'Charizard',
-    height: 1.7,
-    types: ['Fire', 'Flying']
-}
+    pokemonList[2] = {
+        name: 'Charizard',
+        height: 1.7,
+        types: ['Fire', 'Flying']
+    }
 
-pokemonList[3] = {
-    name: 'Squirtle',
-    height: 0.5,
-    types: ['Water']
-}
+    pokemonList[3] = {
+        name: 'Squirtle',
+        height: 0.5,
+        types: ['Water']
+    }
+
+    // Set function to add new Pokemon objects to the pokemonList array
+    function add(pokemon) {
+        pokemonList.push(pokemon);
+    }
+
+    // Set function to get a list of all the Pokemon objects
+    function getAll() {
+        return pokemonList;
+    }
+
+    // Return only the functions defined above
+    return {
+        add: add,
+        getAll: getAll
+    };
+})();
+
 
 // Function for writing the details of a given Pokemon object to the DOM
 function printPokemonList(pokemon) {
@@ -38,4 +58,4 @@ function printPokemonList(pokemon) {
 }
 
 // Loop over the pokemonList array, using the printPokemonList function to write out each Pokemon's details
-pokemonList.forEach(printPokemonList);
+pokemonRepository.getAll().forEach(printPokemonList);
