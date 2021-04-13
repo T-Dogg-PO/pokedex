@@ -26,13 +26,16 @@ pokemonList[3] = {
     types: ['Water']
 }
 
-// Iterate over pokemonList, writing each Pokemon's name and height to the DOM
-for (let i = 0; i < pokemonList.length; i++) {
-    document.write(`<p>${pokemonList[i].name} (height: ${pokemonList[i].height})`);
+// Function for writing the details of a given Pokemon object to the DOM
+function printPokemonList(pokemon) {
+    document.write(`<p>${pokemon.name} (height: ${pokemon.height})`);
     // Check to see if the Pokemon's height is greater than 1, and if it is print an extra statement
-    if (pokemonList[i].height >= 1) {
+    if (pokemon.height >= 1) {
         document.write(' - Wow, that\'s big!');
     }
-    // Final action in the loop is to close the paragraph for this entry
+    // Final action of the function is to close the paragraph for this entry
     document.write('</p>');
 }
+
+// Loop over the pokemonList array, using the printPokemonList function to write out each Pokemon's details
+pokemonList.forEach(printPokemonList);
