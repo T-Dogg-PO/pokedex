@@ -50,10 +50,21 @@ let pokemonRepository = (function() {
         return pokemonList;
     }
 
+    // Set function for searching for a specific Pokemon by its name
+    function findPokemon(pokemonName) {
+        // Create a new array of searchResults using the filter function to pick results where the input Pokemon name matches the name in pokemonList
+        searchResults = pokemonList.filter(function(pokemon) {
+            return pokemon.name === pokemonName;
+        })
+
+        return searchResults;
+    }
+
     // Return only the functions defined above
     return {
         add: add,
-        getAll: getAll
+        getAll: getAll,
+        findPokemon: findPokemon
     };
 })();
 
