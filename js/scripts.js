@@ -30,7 +30,19 @@ let pokemonRepository = (function() {
 
     // Set function to add new Pokemon objects to the pokemonList array
     function add(pokemon) {
-        pokemonList.push(pokemon);
+        // Check that the Pokemon being added has the datatype of 'object' and show an alert if it is not
+        if (typeof(pokemon) !== "object") {
+            alert('This Pokemon is not an object, please check the datatype and resubmit.');
+        // Check that the number of keys given is exactly 3, or else alert the user that they don't have the right number of properties
+        } else if (Object.keys(pokemon).length !== 3) {
+            alert('Please make sure that your Pokemon contains a name, height and types');
+        // Check that the 3 keys given are 'name', 'height' and 'types', otherwise alert the user that they don't have the right keys
+        } else if (!pokemon.hasOwnProperty('name') || !pokemon.hasOwnProperty('height') || !pokemon.hasOwnProperty('types')) {
+            alert('Please make sure that your Pokmeon contains a name, height and types');
+        // If all the other checks pass, add the Pokemon object to the pokemonList array
+        } else {
+            pokemonList.push(pokemon);
+        }
     }
 
     // Set function to get a list of all the Pokemon objects
