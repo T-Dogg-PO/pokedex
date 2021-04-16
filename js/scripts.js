@@ -60,25 +60,46 @@ let pokemonRepository = (function() {
         return searchResults;
     }
 
+    // Function for creating buttons for each Pokemon on the main Pokedex page. This function will be called by each forEach loop
+    function addListItem(pokemon) {
+        // Set the .pokemon-list ul to pokemonListElement
+        let pokemonListElement = document.querySelector('.pokemon-list');
+
+        // Create a li
+        let listItem = document.createElement('li');
+    
+        // Create a button, set it's inner text to the Pokemon in question, add a class for styling
+        let listButton = document.createElement('button');
+        listButton.innerText = `${pokemon.name}`;
+        listButton.classList.add('pokemon-button');
+    
+        // Append the button to the li, then the li to the ul
+        listItem.appendChild(listButton);
+        pokemonListElement.appendChild(listItem);
+
+        // Add an event listener for the Pokemon's button, which will show details for that Pokemon when clicked (by calling the showDetails function below)
+        listButton.addEventListener('click', function() {
+            showDetails(pokemon);
+        });
+    }
+
+    // Function for showing the details of each Pokemon when the button for that Pokemon is clicked
+    function showDetails(pokemon) {
+        console.log(pokemon);
+    }
+
     // Return only the functions defined above
     return {
         add: add,
         getAll: getAll,
-        findPokemon: findPokemon
+        findPokemon: findPokemon,
+        addListItem: addListItem,
+        showDetails: showDetails
     };
 })();
 
 
-// Function for writing the details of a given Pokemon object to the DOM
-function printPokemonList(pokemon) {
-    document.write(`<p>${pokemon.name} (height: ${pokemon.height})`);
-    // Check to see if the Pokemon's height is greater than 1, and if it is print an extra statement
-    if (pokemon.height >= 1) {
-        document.write(' - Wow, that\'s big!');
-    }
-    // Final action of the function is to close the paragraph for this entry
-    document.write('</p>');
-}
-
 // Loop over the pokemonList array, using the printPokemonList function to write out each Pokemon's details
-pokemonRepository.getAll().forEach(printPokemonList);
+pokemonRepository.getAll().forEach(function(pokemon) {
+    pokemonRepository.addListItem(pokemon);
+});

@@ -4,6 +4,9 @@ body {
     font-weight: 400;
     font-size: 16px;
     line-height: 1.6;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-bottom: 20px;
 }
 
 /* Placeholders for changing the layout for small screens (once content exists that will be influenced by small screens) */
@@ -17,4 +20,25 @@ body {
 
 @media all and (max-width: 500px) {
 
+}
+
+/* Remove bullets from ul */
+ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+/* Styling for the buttons for each individual Pokemon, including opacity change for hovering */
+.pokemon-button {
+    font-family: inherit;
+    background-color: #87CEFA;
+    text-decoration: none;
+    padding: 10px;
+    transition: 0.2s opacity;
+}
+
+.pokemon-button:hover, .pokemon-button:focus {
+    cursor: pointer;
+    opacity: 0.8;
 }
