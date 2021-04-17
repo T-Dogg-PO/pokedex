@@ -51,12 +51,19 @@ let pokemonRepository = (function() {
     }
 
     // Set function for searching for a specific Pokemon by its name
-    function findPokemon(pokemonName) {
-        // Create a new array of searchResults using the filter function to pick results where the input Pokemon name matches the name in pokemonList
-        searchResults = pokemonList.filter(function(pokemon) {
-            return pokemon.name === pokemonName;
+    function findPokemon(property, value) {
+        // Create searchResults variable which will store an array (returned by .filter()). .filter will go through pokemonList and add to the searchResults array any Pokemon where the value for the given property matches the arguments
+        let searchResults = pokemonList.filter(function (currentPokemon) {
+            // Check to see if we are searching for "types", which would mean value should be given as an array
+            if (property === 'types') {
+                // Returns any currentPokemon where the value is included in the property array
+                return currentPokemon[property].includes(value);
+            } else {
+                // Returns any currentPokemon where the value matches the given property we are searching for
+                return currentPokemon[property] === value;
+            }
         })
-
+        
         return searchResults;
     }
 
