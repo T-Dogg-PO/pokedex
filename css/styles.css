@@ -42,3 +42,8 @@ ul {
     cursor: pointer;
     opacity: 0.8;
 }
+
+/* Styling the loading indicator */
+#loading {
+    display: none;
+}

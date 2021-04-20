@@ -3,46 +3,13 @@ let pokemonRepository = (function() {
     // Within pokemonRepository, create the pokemonList array which will store a list of Pokemon (with corresponding data about that Pokemon)
     let pokemonList = [];
 
-    // Add sample data to the array to test basic functionality
-    pokemonList[0] = {
-        name: 'Bulbasaur',
-        height: 0.7,
-        types: ['Grass', 'Poison']
-    }
-
-    pokemonList[1] = {
-        name: 'Charmander',
-        height: 0.6,
-        types: ['Fire']
-    }
-
-    pokemonList[2] = {
-        name: 'Charizard',
-        height: 1.7,
-        types: ['Fire', 'Flying']
-    }
-
-    pokemonList[3] = {
-        name: 'Squirtle',
-        height: 0.5,
-        types: ['Water']
-    }
+    // Create variable to store the link to the API where we will get data from
+    let apiUrl = 'https://pokeapi.co/api/v2/pokemon/?limit=151';
 
     // Set function to add new Pokemon objects to the pokemonList array
     function add(pokemon) {
-        // Check that the Pokemon being added has the datatype of 'object' and show an alert if it is not
-        if (typeof(pokemon) !== "object") {
-            alert('This Pokemon is not an object, please check the datatype and resubmit.');
-        // Check that the number of keys given is exactly 3, or else alert the user that they don't have the right number of properties
-        } else if (Object.keys(pokemon).length !== 3) {
-            alert('Please make sure that your Pokemon contains a name, height and types');
-        // Check that the 3 keys given are 'name', 'height' and 'types', otherwise alert the user that they don't have the right keys
-        } else if (!pokemon.hasOwnProperty('name') || !pokemon.hasOwnProperty('height') || !pokemon.hasOwnProperty('types')) {
-            alert('Please make sure that your Pokmeon contains a name, height and types');
-        // If all the other checks pass, add the Pokemon object to the pokemonList array
-        } else {
+        // Add the Pokemon passed in to the pokemonList array (I have removed all data validation checks for now since the data coming from the API should be correctly formatted)
             pokemonList.push(pokemon);
-        }
     }
 
     // Set function to get a list of all the Pokemon objects
@@ -50,21 +17,55 @@ let pokemonRepository = (function() {
         return pokemonList;
     }
 
-    // Set function for searching for a specific Pokemon by its name
-    function findPokemon(property, value) {
-        // Create searchResults variable which will store an array (returned by .filter()). .filter will go through pokemonList and add to the searchResults array any Pokemon where the value for the given property matches the arguments
-        let searchResults = pokemonList.filter(function (currentPokemon) {
-            // Check to see if we are searching for "types", which would mean value should be given as an array
-            if (property === 'types') {
-                // Returns any currentPokemon where the value is included in the property array
-                return currentPokemon[property].includes(value);
-            } else {
-                // Returns any currentPokemon where the value matches the given property we are searching for
-                return currentPokemon[property] === value;
-            }
+    // Function for loading the list of Pokemon from the API
+    function loadList() {
+        // Show the loading message
+        showLoadingMessage();
+        // Make a call to the API defined above
+        return fetch(apiUrl).then(function(response) {
+            // Return a promise (after converting the response from JSON to an object)
+            return response.json();
+        // Then loop over the object above, and for each object call the add() function to add that Pokemon to our pokemonList array
+        }).then(function(json) {
+            json.results.forEach(function(item) {
+                let pokemon = {
+                    name: item.name,
+                    detailsUrl: item.url
+                };
+                add(pokemon);
+            });
+            // Hide the loading message
+            hideLoadingMessage();
+        // Catch any errors durring the API call
+        }).catch(function(e) {
+            console.error(e);
+            // Hide the loading message
+            hideLoadingMessage();
         })
-        
-        return searchResults;
+    }
+
+    // Function for loading the desired details of each individual Pokemon from the API
+    function loadDetails(pokemon) {
+        // Show the loading message
+        showLoadingMessage();
+        // Store the URL for this Pokmeon's details in a variable
+        let url = pokemon.detailsUrl;
+        // Make a call to the API using the above URL, returning a promise (after converting the response from JSON to an object)
+        return fetch(url).then(function(response) {
+            return response.json();
+        // Then add the details that we want (imageUrl, height and types) to this Pokemon
+        }).then(function(details) {
+            pokemon.imageUrl = details.sprites.front_default;
+            pokemon.height = details.height;
+            pokemon.types = details.types;
+            // Hide the loading message
+            hideLoadingMessage();
+        // Catch any errors during the API call
+        }).catch(function(e) {
+            console.error(e);
+            // Hide the loading message
+            hideLoadingMessage();
+        });
     }
 
     // Function for creating buttons for each Pokemon on the main Pokedex page. This function will be called by each forEach loop
@@ -92,14 +93,31 @@ let pokemonRepository = (function() {
 
     // Function for showing the details of each Pokemon when the button for that Pokemon is clicked
     function showDetails(pokemon) {
-        console.log(pokemon);
+        // Call the loadDetails function above to load Pokemon details from the API
+        loadDetails(pokemon).then(function() {
+            console.log(pokemon);
+        });
+    }
+
+    // Function for showing a loading message while waiting for a response from the API
+    function showLoadingMessage() {
+        let loadingMessage = document.querySelector('#loading');
+        loadingMessage.style.display = 'block';
+    }
+
+
+    // Function for hiding the loading message that is displayed in showLoadingMessage()
+    function hideLoadingMessage() {
+        let loadingMessage = document.querySelector('#loading');
+        loadingMessage.style.display = 'none';
     }
 
     // Return only the functions defined above
     return {
         add: add,
         getAll: getAll,
-        findPokemon: findPokemon,
+        loadList: loadList,
+        loadDetails: loadDetails,
         addListItem: addListItem,
         showDetails: showDetails
     };
@@ -107,6 +125,8 @@ let pokemonRepository = (function() {
 
 
 // Loop over the pokemonList array, using the printPokemonList function to write out each Pokemon's details
-pokemonRepository.getAll().forEach(function(pokemon) {
-    pokemonRepository.addListItem(pokemon);
+pokemonRepository.loadList().then(function() {
+    pokemonRepository.getAll().forEach(function(pokemon) {
+        pokemonRepository.addListItem(pokemon);
+    })
 });
