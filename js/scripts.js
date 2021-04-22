@@ -61,7 +61,7 @@ let pokemonRepository = (function() {
             pokemon.imageUrl = details.sprites.front_default;
             pokemon.height = details.height;
             // Spread syntax for the types to make sure we can reference each type in the array in the showDetails function
-            pokemon.types = [...details.types];
+            pokemon.types = details.types;
             // Hide the loading message
             hideLoadingMessage();
         // Catch any errors during the API call
