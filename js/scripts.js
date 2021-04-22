@@ -3,6 +3,9 @@ let pokemonRepository = (function() {
     // Within pokemonRepository, create the pokemonList array which will store a list of Pokemon (with corresponding data about that Pokemon)
     let pokemonList = [];
 
+    // Create variable for the modal-container, which will be used to create a modal pop-up when clicking on a Pokemon's button
+    let modalContainer = document.querySelector('#modal-container');
+
     // Create variable to store the link to the API where we will get data from
     let apiUrl = 'https://pokeapi.co/api/v2/pokemon/?limit=151';
 
@@ -57,7 +60,8 @@ let pokemonRepository = (function() {
         }).then(function(details) {
             pokemon.imageUrl = details.sprites.front_default;
             pokemon.height = details.height;
-            pokemon.types = details.types;
+            // Spread syntax for the types to make sure we can reference each type in the array in the showDetails function
+            pokemon.types = [...details.types];
             // Hide the loading message
             hideLoadingMessage();
         // Catch any errors during the API call
@@ -91,13 +95,78 @@ let pokemonRepository = (function() {
         });
     }
 
-    // Function for showing the details of each Pokemon when the button for that Pokemon is clicked
+    // Function for showing the details of each Pokemon when the button for that Pokemon is clicked by creating a modal
     function showDetails(pokemon) {
-        // Call the loadDetails function above to load Pokemon details from the API
+        // Clear out any existing modal content
+        modalContainer.innerHTML = '';
+
+        // Create a div for the modal and add the class 'modal' to it
+        let modal = document.createElement('div');
+        modal.classList.add('modal');
+
+        // Add close button to the modal. When the close button is clicked, call the hideModal function
+        let closeButtonElement = document.createElement('button');
+        closeButtonElement.classList.add('modal-close');
+        closeButtonElement.innerText = 'Close';
+        closeButtonElement.addEventListener('click', hideModal);
+
+        // Call the loadDetails function to load Pokemon details from the API, and add this information to the Modal
         loadDetails(pokemon).then(function() {
-            console.log(pokemon);
+            // Add the Pokemon's name as an h1 element
+            let modalName = document.createElement('h1');
+            modalName.innerText = pokemon.name;
+
+            // Add the Pokemon's height as a p element
+            let modalHeight = document.createElement('p');
+            modalHeight.innerText = 'Height: ' + pokemon.height;
+
+            // Add the Pokemon's types as a p element
+            let modalTypes = document.createElement('p');
+            let thisPokemonTypes = 'Types: ';
+            // Loop through the pokemon.types array, then get type.name for the display name of the type
+            pokemon.types.forEach(function(individualType) {
+                thisPokemonTypes += individualType.type.name + ' ';
+            });
+            // Add final list of types to modalTypes
+            modalTypes.innerText = thisPokemonTypes;
+
+            // Add the sprite image of this Pokemon in an img tag
+            let modalImage = document.createElement('img');
+            modalImage.src = pokemon.imageUrl;
+
+            // Append each element to the modal div, then append the modal div to the modalContainer
+            modal.appendChild(closeButtonElement);
+            modal.appendChild(modalName);
+            modal.appendChild(modalHeight);
+            modal.appendChild(modalTypes);
+            modal.appendChild(modalImage);
+            modalContainer.appendChild(modal);
+
+            // Make the modal visible
+            modalContainer.classList.add('is-visible');
+
         });
     }
+
+    // Function for hiding the modal
+    function hideModal() {
+        modalContainer.classList.remove('is-visible');
+    }
+
+    // Event listener to close the modal when the esc key is pressed
+    window.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modalContainer.classList.contains('is-visible')) {
+            hideModal();
+        }
+    });
+
+    // Event listener to close the modal when the mouse is clicked outside of the modal
+    modalContainer.addEventListener('click', (e) => {
+        let target = e.target;
+        if (target === modalContainer) {
+            hideModal();
+        }
+    });
 
     // Function for showing a loading message while waiting for a response from the API
     function showLoadingMessage() {
