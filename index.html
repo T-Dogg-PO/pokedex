@@ -3,6 +3,8 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
         <link rel="stylesheet" type="text/css" href="css/styles.css">
         <!-- Font obtained from https://fonts.google.com/specimen/Press+Start+2P#standard-styles -->
         <link rel="preconnect" href="https://fonts.gstatic.com">
@@ -10,14 +12,75 @@
         <title>Pokedex</title>
     </head>
     <body>
-        <h1>Pokedex</h1>
+        <!-- Navbar which will have the app name and a search box -->
+        <nav class="navbar navbar-expand-xl navbar-light bg-light">
+            <a class="navbar-brand" href="/index.html">Pokedex</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- Collapsable content on navbar -->
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav">
+                    <!-- List items for selecting generations -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Select a Generation of Pokemon
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" id="all" href="#">All Generations</a>
+                            <a class="dropdown-item" id="gen1" href="#">Gen 1</a>
+                            <a class="dropdown-item" id="gen2" href="#">Gen 2</a>
+                            <a class="dropdown-item" id="gen3" href="#">Gen 3</a>
+                            <a class="dropdown-item" id="gen4" href="#">Gen 4</a>
+                            <a class="dropdown-item" id="gen5" href="#">Gen 5</a>
+                            <a class="dropdown-item" id="gen6" href="#">Gen 6</a>
+                            <a class="dropdown-item" id="gen7" href="#">Gen 7</a>
+                            <a class="dropdown-item" id="gen8" href="#">Gen 8</a>
+                        </div>
+                    </li>
+                </ul>
+                <ul class="navbar-nav ml-auto">
+                    <!-- Search box for the navbar -->
+                    <form class="form-inline my-2 my-lg-0">
+                        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" id="pokemon-search">
+                    </form>
+                </ul>
+            </div>
+        </nav>
+        <!-- Placeholder for loading message -->
         <div id="loading">Loading</div>
 
         <!-- Div for holding the modal that will pop-up with a Pokemon's details -->
-        <div id="modal-container"></div>
-        <ul class="pokemon-list">
+        <div class="modal fade" id="pokemonModal" tabindex="-1" role="dialog" aria-labelledby="pokemonModal" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <!-- Pokemon name and the close button will go here -->
+                    <div class="modal-header" id="pokemon-modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="close"><span aria-hidden="true"></span></button>
+                    </div>
+                    <!-- Pokemon details will go here -->
+                    <div class="modal-body" id="pokemon-modal-body">
+                    </div>
+                </div>
+            </div>
+        </div>
 
-        </ul>
+        <!-- Container which holds the ul where our Pokemon buttons will be listed -->
+        <div class="container-fluid">
+            <div class="d-flex justify-content-center">
+                <ul class="list-group flex-row flex-wrap" id="pokemon-list">
+
+                </ul>
+            </div>
+        </div>
+
+        <!-- Bootstrap JS -->
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+        <!-- Polyfill for promise and fetch to ensure browser compatibility -->
         <script src="js/promise-polyfill.js"></script>
         <script src="js/fetch-polyfill.js"></script>
         <script src="js/scripts.js"></script>

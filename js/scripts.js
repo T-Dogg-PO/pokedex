@@ -3,11 +3,54 @@ let pokemonRepository = (function() {
     // Within pokemonRepository, create the pokemonList array which will store a list of Pokemon (with corresponding data about that Pokemon)
     let pokemonList = [];
 
-    // Create variable for the modal-container, which will be used to create a modal pop-up when clicking on a Pokemon's button
-    let modalContainer = document.querySelector('#modal-container');
-
     // Create variable to store the link to the API where we will get data from
     let apiUrl = 'https://pokeapi.co/api/v2/pokemon/?limit=151';
+    let apiGen1 = 'https://pokeapi.co/api/v2/pokemon/?limit=151';
+    let apiGen2 = 'https://pokeapi.co/api/v2/pokemon/?limit=100&offset=151';
+    let apiGen3 = 'https://pokeapi.co/api/v2/pokemon/?limit=135&offset=251';
+    let apiGen4 = 'https://pokeapi.co/api/v2/pokemon/?limit=107&offset=386';
+    let apiGen5 = 'https://pokeapi.co/api/v2/pokemon/?limit=156&offset=493';
+    let apiGen6 = 'https://pokeapi.co/api/v2/pokemon/?limit=72&offset=649';
+    let apiGen7 = 'https://pokeapi.co/api/v2/pokemon/?limit=88&offset=721';
+    let apiGen8 = 'https://pokeapi.co/api/v2/pokemon/?limit=89&offset=809';
+    let apiAllGen = 'https://pokeapi.co/api/v2/pokemon/?limit=898';
+
+    // Change generation function
+    function changeGen() {
+        loadList().then(function() {
+            getAll().forEach(function(pokemon) {
+                addListItem(pokemon);
+            })
+        });
+    }
+    
+    // Listen for selection of a generation
+    dropdownItems = $('.dropdown-item');
+    dropdownItems.on('click', function() {
+        selectedID = $(this).attr('id');
+        if (selectedID === 'all') {
+            apiUrl = apiAllGen;
+        } else if (selectedID === 'gen1') {
+            apiUrl = apiGen1;
+        } else if (selectedID === 'gen2') {
+            apiUrl = apiGen2;
+        } else if (selectedID === 'gen3') {
+            apiUrl = apiGen3;
+        } else if (selectedID === 'gen4') {
+            apiUrl = apiGen4;
+        } else if (selectedID === 'gen5') {
+            apiUrl = apiGen5;
+        } else if (selectedID === 'gen6') {
+            apiUrl = apiGen6;
+        } else if (selectedID === 'gen7') {
+            apiUrl = apiGen7;
+        } else if (selectedID === 'gen8') {
+            apiUrl = apiGen8;
+        }
+        $('#pokemon-list').children().remove();
+        pokemonList = [];
+        changeGen();
+    });
 
     // Set function to add new Pokemon objects to the pokemonList array
     function add(pokemon) {
@@ -33,8 +76,9 @@ let pokemonRepository = (function() {
             json.results.forEach(function(item) {
                 let pokemon = {
                     name: item.name,
-                    detailsUrl: item.url
+                    detailsUrl: item.url,
                 };
+                pokemon.name = pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1);
                 add(pokemon);
             });
             // Hide the loading message
@@ -58,7 +102,7 @@ let pokemonRepository = (function() {
             return response.json();
         // Then add the details that we want (imageUrl, height and types) to this Pokemon
         }).then(function(details) {
-            pokemon.imageUrl = details.sprites.front_default;
+            pokemon.imageUrl = details.sprites.other['official-artwork'].front_default;
             pokemon.height = details.height;
             // Spread syntax for the types to make sure we can reference each type in the array in the showDetails function
             pokemon.types = details.types;
@@ -75,98 +119,65 @@ let pokemonRepository = (function() {
     // Function for creating buttons for each Pokemon on the main Pokedex page. This function will be called by each forEach loop
     function addListItem(pokemon) {
         // Set the .pokemon-list ul to pokemonListElement
-        let pokemonListElement = document.querySelector('.pokemon-list');
+        let pokemonListElement = $('#pokemon-list');
 
-        // Create a li
-        let listItem = document.createElement('li');
+        // Create a li with Bootstrap classes for the list group and a bottom margin for styling
+        let listItem = $('<li class="list-group-item col col-lg-3 border-0"></li>');
     
-        // Create a button, set it's inner text to the Pokemon in question, add a class for styling
-        let listButton = document.createElement('button');
-        listButton.innerText = `${pokemon.name}`;
-        listButton.classList.add('pokemon-button');
-    
+        // Create a button, set it's inner text to the Pokemon in question, add Bootstrap class for buttons
+        let listButton = $(`<button type="button" data-toggle="modal" data-target="#pokemonModal" class="btn btn-block">${pokemon.name}</button>`);
+
         // Append the button to the li, then the li to the ul
-        listItem.appendChild(listButton);
-        pokemonListElement.appendChild(listItem);
+        listItem.append(listButton);
+        pokemonListElement.append(listItem);
 
         // Add an event listener for the Pokemon's button, which will show details for that Pokemon when clicked (by calling the showDetails function below)
-        listButton.addEventListener('click', function() {
+        listButton.on('click', function() {
             showDetails(pokemon);
         });
     }
 
     // Function for showing the details of each Pokemon when the button for that Pokemon is clicked by creating a modal
     function showDetails(pokemon) {
-        // Clear out any existing modal content
-        modalContainer.innerHTML = '';
-
-        // Create a div for the modal and add the class 'modal' to it
-        let modal = document.createElement('div');
-        modal.classList.add('modal');
-
-        // Add close button to the modal. When the close button is clicked, call the hideModal function
-        let closeButtonElement = document.createElement('button');
-        closeButtonElement.classList.add('modal-close');
-        closeButtonElement.innerText = 'Close';
-        closeButtonElement.addEventListener('click', hideModal);
-
         // Call the loadDetails function to load Pokemon details from the API, and add this information to the Modal
         loadDetails(pokemon).then(function() {
+            let modalTitle = $('#pokemon-modal-header');
+            let modalBody = $('#pokemon-modal-body');
+
+            // Empty existing modal content
+            modalBody.empty();
+            modalTitle.empty();
+ 
             // Add the Pokemon's name as an h1 element
-            let modalName = document.createElement('h1');
-            modalName.innerText = pokemon.name;
+            let modalName = $(`<h1 class="w-100 text-center">${pokemon.name}</h1>`);
 
             // Add the Pokemon's height as a p element
-            let modalHeight = document.createElement('p');
-            modalHeight.innerText = 'Height: ' + pokemon.height;
+            let modalHeight = $(`<p class="text-center">Height: ${pokemon.height}</p>`);
 
             // Add the Pokemon's types as a p element
-            let modalTypes = document.createElement('p');
-            let thisPokemonTypes = 'Types: ';
+            let thisPokemonTypes = [];
             // Loop through the pokemon.types array, then get type.name for the display name of the type
             pokemon.types.forEach(function(individualType) {
-                thisPokemonTypes += individualType.type.name + ' ';
+                capitalType = individualType.type.name.charAt(0).toUpperCase() + individualType.type.name.slice(1);
+                thisPokemonTypes.push(capitalType);
             });
-            // Add final list of types to modalTypes
-            modalTypes.innerText = thisPokemonTypes;
+
+            let modalTypes = $(`<p class="text-center">Types: ${thisPokemonTypes}</p>`);
 
             // Add the sprite image of this Pokemon in an img tag
-            let modalImage = document.createElement('img');
-            modalImage.src = pokemon.imageUrl;
+            let modalImage = $(`<img class="img-fluid" src="${pokemon.imageUrl}">`);
 
-            // Append each element to the modal div, then append the modal div to the modalContainer
-            modal.appendChild(closeButtonElement);
-            modal.appendChild(modalName);
-            modal.appendChild(modalHeight);
-            modal.appendChild(modalTypes);
-            modal.appendChild(modalImage);
-            modalContainer.appendChild(modal);
+            // Add close button for the modal
+            let closeButton = $('<button type="button" class="btn-close" data-dismiss="modal" aria-label="close">X</button>');
 
-            // Make the modal visible
-            modalContainer.classList.add('is-visible');
-
+            // Append each element to the appropriate part of the modal
+            modalTitle.append(modalName);
+            modalTitle.append(closeButton);
+            modalBody.append(modalHeight);
+            modalBody.append(modalTypes);
+            modalBody.append(modalImage);
         });
     }
-
-    // Function for hiding the modal
-    function hideModal() {
-        modalContainer.classList.remove('is-visible');
-    }
-
-    // Event listener to close the modal when the esc key is pressed
-    window.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && modalContainer.classList.contains('is-visible')) {
-            hideModal();
-        }
-    });
-
-    // Event listener to close the modal when the mouse is clicked outside of the modal
-    modalContainer.addEventListener('click', (e) => {
-        let target = e.target;
-        if (target === modalContainer) {
-            hideModal();
-        }
-    });
 
     // Function for showing a loading message while waiting for a response from the API
     function showLoadingMessage() {
@@ -174,12 +185,34 @@ let pokemonRepository = (function() {
         loadingMessage.style.display = 'block';
     }
 
-
     // Function for hiding the loading message that is displayed in showLoadingMessage()
     function hideLoadingMessage() {
         let loadingMessage = document.querySelector('#loading');
         loadingMessage.style.display = 'none';
     }
+
+    // Event listener for search box in navbar
+    let pokemonSearch = $('#pokemon-search');
+    // On any input into the search box, run the inner function
+    pokemonSearch.on('input', function() {
+        // Store values of the list of Pokemon and the search value in the search box
+        let listOfPokemon = $('.list-group-item');
+        let searchValue = pokemonSearch.val().toLowerCase();
+
+        // Loop through the listOfPokemon
+        listOfPokemon.each(function(pokemon) {
+            // Convert the inner text of each entry (i.e. the name on each button) to a string
+            let pokemonEntry = $(this).text()
+            // Check to see if searchValue exists in the pokemonEntry string
+            if (pokemonEntry.toLowerCase().indexOf(searchValue) > -1) {
+                // If yes, do nothing to change the display
+                this.style.display = '';
+            } else {
+                // Otherwise, hide this entry on the page
+                this.style.display = 'none';
+            }
+        });
+    });
 
     // Return only the functions defined above
     return {

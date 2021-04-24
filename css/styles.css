@@ -4,12 +4,8 @@ body {
     font-weight: 400;
     font-size: 16px;
     line-height: 1.6;
-    padding-left: 20px;
-    padding-right: 20px;
-    padding-bottom: 20px;
 }
 
-/* Placeholders for changing the layout for small screens (once content exists that will be influenced by small screens) */
 @media all and (max-width: 750px) {
 
 }
@@ -18,27 +14,25 @@ body {
 
 }
 
+/* Changing the font size of the Pokemon name on smaller screens */
 @media all and (max-width: 500px) {
-
+	h1 {
+		font-size: 18px;
+	}
 }
 
-/* Remove bullets from ul */
-ul {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-}
-
-/* Styling for the buttons for each individual Pokemon, including opacity change for hovering */
-.pokemon-button {
+/* Styling for the buttons for each individual Pokemon, including opacity change for hovering. Overwriting some of the defaults that Bootstrap comes with */
+.btn {
     font-family: inherit;
     background-color: #87CEFA;
     text-decoration: none;
     padding: 10px;
+	margin: auto;
     transition: 0.2s opacity;
+	min-width: 200px;
 }
 
-.pokemon-button:hover, .pokemon-button:focus {
+.btn:hover, .btn:focus {
     cursor: pointer;
     opacity: 0.8;
 }
@@ -48,73 +42,88 @@ ul {
     display: none;
 }
 
-/* Hide modal by default */
-#modal-container {
-    display: none;
+/* Colours for the different types. Credit to https://gist.github.com/agarie/2610520 for providing hex codes for these styles */
+.normal {
+	background-color: #A8A878;
+	border: 1px solid #6D6D4E;
 }
 
-/* Styling for modal container when a button is clicked to bring it up (positioning and sizing) */
-#modal-container.is-visible {
-    /* Position of the modal will be fixed in place */
-    position: fixed;
-    /* Padding is included in elements width and height (thanks to box-sizing) */
-    padding: 20px;
-    box-sizing: border-box;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    /* Background of container element is slightly opaque */
-    background: rgba(0, 0, 0, 0.5);
-    /* z-index brings the modal in front of all other elements */
-    z-index: 999;
-    /* Allows scrolling if the screen isn't high enough */
-    overflow: auto;
-    /* Centers the modal in the screen */
-    display: grid;
-    text-align: center;
+.fire {
+	background-color: #F08030;
+	border: 1px solid #9C531F;
 }
 
-/* Actual modal created through scripts.js */
-.modal {
-    /* Margin of modal based on browser window size */
-    margin: auto;
-    display: inline-block;
-    box-sizing: border-box;
-    background: #ffffff;
-    padding: 15px;
-    width: 100%;
-    max-width: 700px;
-    text-align: left;
+.water {
+	background-color: #6890F0;
+	border: 1px solid #445E9C;
 }
 
-/* Close button for the modal */
-.modal-close {
-    float: right;
-    border: 0;
-    background: none;
-    color: #777;
-    text-decoration: underline;
+.electric {
+	background-color: #F8D030;
+	border: 1px solid #A1871F;
 }
 
-/* Change the cursor to a pointer when hovering over the close button */
-.modal-close:hover {
-    cursor: pointer;
+.grass {
+	background-color: #78C850;
+	border: 1px solid #4E8234;
 }
 
-/* Modal heading, centered in the modal */
-.modal h1 {
-    margin-top: 0;
-    text-align: center;
+.ice {
+	background-color: #98D8D8;
+	border: 1px solid #638D8D;
 }
 
-/* Modal content */
-.modal p {
-    margin-bottom: 0;
+.ground {
+	background-color: #E0C068;
+	border: 1px solid #927D44;
 }
 
-/* Modal image, centered in the modal */
-.modal img {
-    display: block;
-    margin: auto;
+.flying {
+	background-color: #A890F0;
+	border: 1px solid #6D5E9C;
+}
+
+.ghost {
+	background-color: #705898;
+	border: 1px solid #493963;
+}
+
+.rock {
+	background-color: #B8A038;
+	border: 1px solid #786824;
+}
+
+.fighting {
+	background-color: #C03028;
+	border: 1px solid #7D1F1A;
+}
+
+.poison {
+	background-color: #A040A0;
+	border: 1px solid #682A68;
+}
+
+.psychic {
+	background-color: #F85888;
+	border: 1px solid #A13959;
+}
+
+.bug {
+	background-color: #A8B820;
+	border: 1px solid #6D7815;
+}
+
+.dark {
+	background-color: #705848;
+	border: 1px solid #49392F;
+}
+
+.steel {
+	background-color: #B8B8D0;
+	border: 1px solid #787887;
+}
+
+.dragon {
+	background-color: #7038F8;
+	border: 1px solid #4924A1;
 }
