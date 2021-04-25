@@ -23,7 +23,7 @@ let pokemonRepository = (function() {
             })
         });
     }
-    
+
     // Listen for selection of a generation
     dropdownItems = $('.dropdown-item');
     dropdownItems.on('click', function() {
@@ -152,17 +152,25 @@ let pokemonRepository = (function() {
             let modalName = $(`<h1 class="w-100 text-center">${pokemon.name}</h1>`);
 
             // Add the Pokemon's height as a p element
-            let modalHeight = $(`<p class="text-center">Height: ${pokemon.height}</p>`);
+            let modalHeight = $(`<p class="text-center">Height: ${(pokemon.height)/10}m</p>`);
 
             // Add the Pokemon's types as a p element
             let thisPokemonTypes = [];
             // Loop through the pokemon.types array, then get type.name for the display name of the type
+            let modalTypes = $(`<p class="text-center">Types: </p>`);
+
+
+
             pokemon.types.forEach(function(individualType) {
+                console.log(individualType.type.name)
+                typesSpan = $(`<span class="${individualType.type.name} pokemon-type text-center"></span>`);
                 capitalType = individualType.type.name.charAt(0).toUpperCase() + individualType.type.name.slice(1);
+                typesSpan.text(`${capitalType} `);
+                modalTypes.append(typesSpan);
                 thisPokemonTypes.push(capitalType);
             });
 
-            let modalTypes = $(`<p class="text-center">Types: ${thisPokemonTypes}</p>`);
+            
 
             // Add the sprite image of this Pokemon in an img tag
             let modalImage = $(`<img class="img-fluid" src="${pokemon.imageUrl}">`);
@@ -174,6 +182,12 @@ let pokemonRepository = (function() {
             modalTitle.append(modalName);
             modalTitle.append(closeButton);
             modalBody.append(modalHeight);
+
+            // thisPokemonTypes.forEach(function() {
+            //     console.log(this.capitalType);
+            //     modalTypes.append($(`<span class="${this.capitalType}">${this.capitalType}</span>`))
+            // })
+
             modalBody.append(modalTypes);
             modalBody.append(modalImage);
         });
