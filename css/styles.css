@@ -29,7 +29,7 @@ body {
     opacity: 0.8;
 }
 
-/* Styling the loading indicator */
+/* Hiding the loading spinner on page load */
 #loading, #loading-modal {
     display: none;
 }

@@ -3,7 +3,7 @@ let pokemonRepository = (function() {
     // Within pokemonRepository, create the pokemonList array which will store a list of Pokemon (with corresponding data about that Pokemon)
     let pokemonList = [];
 
-    // Create variable to store the link to the API where we will get data from
+    // Create variable to store the link to the API where we will get data from and variables for filtering by generation
     let apiUrl = 'https://pokeapi.co/api/v2/pokemon/?limit=151';
     let apiGen1 = 'https://pokeapi.co/api/v2/pokemon/?limit=151';
     let apiGen2 = 'https://pokeapi.co/api/v2/pokemon/?limit=100&offset=151';
@@ -15,7 +15,7 @@ let pokemonRepository = (function() {
     let apiGen8 = 'https://pokeapi.co/api/v2/pokemon/?limit=89&offset=809';
     let apiAllGen = 'https://pokeapi.co/api/v2/pokemon/?limit=898';
 
-    // Change generation function
+    // Change generation function. When called it will reload the list using an updated API link
     function changeGen() {
         loadList().then(function() {
             getAll().forEach(function(pokemon) {
@@ -24,7 +24,7 @@ let pokemonRepository = (function() {
         });
     }
 
-    // Listen for selection of a generation
+    // Listen for selection of a generation. Takes the ID of the link that's selected, then changes apiUrl to match the selected filter
     dropdownItems = $('.dropdown-item');
     dropdownItems.on('click', function() {
         selectedID = $(this).attr('id');
@@ -47,8 +47,11 @@ let pokemonRepository = (function() {
         } else if (selectedID === 'gen8') {
             apiUrl = apiGen8;
         }
+        // Remove all existing Pokemon buttons from ul
         $('#pokemon-list').children().remove();
+        // Clear out the pokemonList array
         pokemonList = [];
+        // Call changeGen to reload the Pokemon list with the updated API link
         changeGen();
     });
 
@@ -65,7 +68,7 @@ let pokemonRepository = (function() {
 
     // Function for loading the list of Pokemon from the API
     function loadList() {
-        // Show the loading message
+        // Show the loading spinner
         showLoadingSpinner();
         // Make a call to the API defined above
         return fetch(apiUrl).then(function(response) {
@@ -78,22 +81,23 @@ let pokemonRepository = (function() {
                     name: item.name,
                     detailsUrl: item.url,
                 };
+                // Capitalize the Pokemon's name
                 pokemon.name = pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1);
                 add(pokemon);
             });
-            // Hide the loading message
+            // Hide the loading spinner
             hideLoadingSpinner();
         // Catch any errors durring the API call
         }).catch(function(e) {
             console.error(e);
-            // Hide the loading message
+            // Hide the loading spinner
             hideLoadingSpinner();
         })
     }
 
     // Function for loading the desired details of each individual Pokemon from the API
     function loadDetails(pokemon) {
-        // Show the loading message
+        // Show the loading spinner for the modal
         showLoadingModalSpinner();
         // Store the URL for this Pokmeon's details in a variable
         let url = pokemon.detailsUrl;
@@ -104,14 +108,13 @@ let pokemonRepository = (function() {
         }).then(function(details) {
             pokemon.imageUrl = details.sprites.other['official-artwork'].front_default;
             pokemon.height = details.height;
-            // Spread syntax for the types to make sure we can reference each type in the array in the showDetails function
             pokemon.types = details.types;
-            // Hide the loading message
+            // Hide the loading spinner
             hideLoadingModalSpinner();
         // Catch any errors during the API call
         }).catch(function(e) {
             console.error(e);
-            // Hide the loading message
+            // Hide the loading spinner
             hideLoadingModalSpinner();
         });
     }
@@ -121,7 +124,7 @@ let pokemonRepository = (function() {
         // Set the .pokemon-list ul to pokemonListElement
         let pokemonListElement = $('#pokemon-list');
 
-        // Create a li with Bootstrap classes for the list group and a bottom margin for styling
+        // Create a li with Bootstrap classes for the list group
         let listItem = $('<li class="list-group-item col col-lg-3 border-0"></li>');
     
         // Create a button, set it's inner text to the Pokemon in question, add Bootstrap class for buttons
@@ -137,7 +140,7 @@ let pokemonRepository = (function() {
         });
     }
 
-    // Function for showing the details of each Pokemon when the button for that Pokemon is clicked by creating a modal
+    // Function for showing the details of each Pokemon when the button for that Pokemon is clicked by showing a modal
     function showDetails(pokemon) {
         // Call the loadDetails function to load Pokemon details from the API, and add this information to the Modal
         loadDetails(pokemon).then(function() {
@@ -158,18 +161,18 @@ let pokemonRepository = (function() {
             let modalHeight = $(`<p class="text-center">Height: ${(pokemon.height)/10}m</p>`);
 
             // Add the Pokemon's types as a p element
-            let thisPokemonTypes = [];
-            // Loop through the pokemon.types array, then get type.name for the display name of the type
             let modalTypes = $(`<p class="text-center">Types: </p>`);
 
-
-
+            // Loop through the pokemon.types array, then get type.name for the display name of the type
             pokemon.types.forEach(function(individualType) {
+                // Adding a span here will allow us to change the colour of this type section depending on what type it is
                 typesSpan = $(`<span class="${individualType.type.name} pokemon-type text-center"></span>`);
+                // Capitalize the type name
                 capitalType = individualType.type.name.charAt(0).toUpperCase() + individualType.type.name.slice(1);
+                // Add the type text to the <span>
                 typesSpan.text(`${capitalType} `);
+                // Add the <span> to the <p> element above
                 modalTypes.append(typesSpan);
-                thisPokemonTypes.push(capitalType);
             });
 
             // Add the sprite image of this Pokemon in an img tag
@@ -223,7 +226,7 @@ let pokemonRepository = (function() {
         let searchValue = pokemonSearch.val().toLowerCase();
 
         // Loop through the listOfPokemon
-        listOfPokemon.each(function(pokemon) {
+        listOfPokemon.each(function() {
             // Convert the inner text of each entry (i.e. the name on each button) to a string
             let pokemonEntry = $(this).text()
             // Check to see if searchValue exists in the pokemonEntry string
