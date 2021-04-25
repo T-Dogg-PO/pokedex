@@ -66,7 +66,7 @@ let pokemonRepository = (function() {
     // Function for loading the list of Pokemon from the API
     function loadList() {
         // Show the loading message
-        showLoadingMessage();
+        showLoadingSpinner();
         // Make a call to the API defined above
         return fetch(apiUrl).then(function(response) {
             // Return a promise (after converting the response from JSON to an object)
@@ -82,19 +82,19 @@ let pokemonRepository = (function() {
                 add(pokemon);
             });
             // Hide the loading message
-            hideLoadingMessage();
+            hideLoadingSpinner();
         // Catch any errors durring the API call
         }).catch(function(e) {
             console.error(e);
             // Hide the loading message
-            hideLoadingMessage();
+            hideLoadingSpinner();
         })
     }
 
     // Function for loading the desired details of each individual Pokemon from the API
     function loadDetails(pokemon) {
         // Show the loading message
-        showLoadingMessage();
+        showLoadingModalSpinner();
         // Store the URL for this Pokmeon's details in a variable
         let url = pokemon.detailsUrl;
         // Make a call to the API using the above URL, returning a promise (after converting the response from JSON to an object)
@@ -107,12 +107,12 @@ let pokemonRepository = (function() {
             // Spread syntax for the types to make sure we can reference each type in the array in the showDetails function
             pokemon.types = details.types;
             // Hide the loading message
-            hideLoadingMessage();
+            hideLoadingModalSpinner();
         // Catch any errors during the API call
         }).catch(function(e) {
             console.error(e);
             // Hide the loading message
-            hideLoadingMessage();
+            hideLoadingModalSpinner();
         });
     }
 
@@ -147,6 +147,9 @@ let pokemonRepository = (function() {
             // Empty existing modal content
             modalBody.empty();
             modalTitle.empty();
+
+            // Show the loading spinner for the modal
+            showLoadingModalSpinner();
  
             // Add the Pokemon's name as an h1 element
             let modalName = $(`<h1 class="w-100 text-center">${pokemon.name}</h1>`);
@@ -162,7 +165,6 @@ let pokemonRepository = (function() {
 
 
             pokemon.types.forEach(function(individualType) {
-                console.log(individualType.type.name)
                 typesSpan = $(`<span class="${individualType.type.name} pokemon-type text-center"></span>`);
                 capitalType = individualType.type.name.charAt(0).toUpperCase() + individualType.type.name.slice(1);
                 typesSpan.text(`${capitalType} `);
@@ -170,39 +172,46 @@ let pokemonRepository = (function() {
                 thisPokemonTypes.push(capitalType);
             });
 
-            
-
             // Add the sprite image of this Pokemon in an img tag
             let modalImage = $(`<img class="img-fluid" src="${pokemon.imageUrl}">`);
 
             // Add close button for the modal
             let closeButton = $('<button type="button" class="btn-close" data-dismiss="modal" aria-label="close">X</button>');
+            
+            // Hide the loading modal spinner
+            hideLoadingModalSpinner();
 
             // Append each element to the appropriate part of the modal
             modalTitle.append(modalName);
             modalTitle.append(closeButton);
             modalBody.append(modalHeight);
-
-            // thisPokemonTypes.forEach(function() {
-            //     console.log(this.capitalType);
-            //     modalTypes.append($(`<span class="${this.capitalType}">${this.capitalType}</span>`))
-            // })
-
             modalBody.append(modalTypes);
             modalBody.append(modalImage);
         });
     }
 
-    // Function for showing a loading message while waiting for a response from the API
-    function showLoadingMessage() {
-        let loadingMessage = document.querySelector('#loading');
-        loadingMessage.style.display = 'block';
+    // Function for showing a loading spinner while waiting for a response from the API
+    function showLoadingSpinner() {
+        let loadingSpinner = document.querySelector('#loading');
+        loadingSpinner.style.display = 'block';
     }
 
-    // Function for hiding the loading message that is displayed in showLoadingMessage()
-    function hideLoadingMessage() {
-        let loadingMessage = document.querySelector('#loading');
-        loadingMessage.style.display = 'none';
+    // Function for hiding the loading spinner that is displayed in showLoadingMessage()
+    function hideLoadingSpinner() {
+        let loadingSpinner = document.querySelector('#loading');
+        loadingSpinner.style.display = 'none';
+    }
+
+    // Function for showing a loading spinner while the pop-up modal loads
+    function showLoadingModalSpinner() {
+        let loadingSpinner = document.querySelector('#loading-modal');
+        loadingSpinner.style.display = 'block';
+    }
+
+    // Function for hiding the loading spinner while the pop-up modal loads
+    function hideLoadingModalSpinner() {
+        let loadingSpinner = document.querySelector('#loading-modal');
+        loadingSpinner.style.display = 'none';
     }
 
     // Event listener for search box in navbar
@@ -235,7 +244,7 @@ let pokemonRepository = (function() {
         loadList: loadList,
         loadDetails: loadDetails,
         addListItem: addListItem,
-        showDetails: showDetails
+        showDetails: showDetails,
     };
 })();
 

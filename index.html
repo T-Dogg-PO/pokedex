@@ -48,14 +48,26 @@
                 </ul>
             </div>
         </nav>
+        <!-- Bootstrap loading spinner -->
+        <div class="d-flex justify-content-center">
+            <div class="spinner-border text-info" role="status" id="loading">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
         <!-- Placeholder for loading message -->
-        <div id="loading">Loading</div>
+        <!-- <div id="loading">Loading</div> -->
 
         <!-- Div for holding the modal that will pop-up with a Pokemon's details -->
         <div class="modal fade" id="pokemonModal" tabindex="-1" role="dialog" aria-labelledby="pokemonModal" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <!-- Pokemon name and the close button will go here -->
+                    <!-- Bootstrap loading spinner for modal -->
+                    <div class="d-flex justify-content-center">
+                        <div class="spinner-border text-info" role="status" id="loading-modal">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+                    </div>
                     <div class="modal-header" id="pokemon-modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="close"><span aria-hidden="true"></span></button>
                     </div>

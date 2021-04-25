@@ -6,14 +6,6 @@ body {
     line-height: 1.6;
 }
 
-@media all and (max-width: 750px) {
-
-}
-
-@media all and (min-width: 500px) and (max-width: 750px) {
-
-}
-
 /* Changing the font size of the Pokemon name on smaller screens */
 @media all and (max-width: 500px) {
 	h1 {
@@ -38,7 +30,7 @@ body {
 }
 
 /* Styling the loading indicator */
-#loading {
+#loading, #loading-modal {
     display: none;
 }
 
