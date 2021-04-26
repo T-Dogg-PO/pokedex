@@ -1,5 +1,5 @@
 // Wrap Pokemon information in an IIFE
-let pokemonRepository = (function() {
+let pokemonRepository = (function () {
     // Within pokemonRepository, create the pokemonList array which will store a list of Pokemon (with corresponding data about that Pokemon)
     let pokemonList = [];
 
@@ -17,17 +17,21 @@ let pokemonRepository = (function() {
 
     // Change generation function. When called it will reload the list using an updated API link
     function changeGen() {
-        loadList().then(function() {
-            getAll().forEach(function(pokemon) {
+        loadList().then(function () {
+            getAll().forEach(function (pokemon) {
                 addListItem(pokemon);
             })
         });
     }
 
     // Listen for selection of a generation. Takes the ID of the link that's selected, then changes apiUrl to match the selected filter
-    dropdownItems = $('.dropdown-item');
-    dropdownItems.on('click', function() {
-        selectedID = $(this).attr('id');
+    let dropdownItems = $('.dropdown-item');
+    dropdownItems.on('click', function () {
+        let selectedID = $(this).attr('id');
+        let selectedButton = $(this);
+        let previousButton = $('.active');
+        previousButton.removeClass('active');
+        selectedButton.addClass('active');
         if (selectedID === 'all') {
             apiUrl = apiAllGen;
         } else if (selectedID === 'gen1') {
@@ -58,7 +62,7 @@ let pokemonRepository = (function() {
     // Set function to add new Pokemon objects to the pokemonList array
     function add(pokemon) {
         // Add the Pokemon passed in to the pokemonList array (I have removed all data validation checks for now since the data coming from the API should be correctly formatted)
-            pokemonList.push(pokemon);
+        pokemonList.push(pokemon);
     }
 
     // Set function to get a list of all the Pokemon objects
@@ -71,12 +75,12 @@ let pokemonRepository = (function() {
         // Show the loading spinner
         showLoadingSpinner();
         // Make a call to the API defined above
-        return fetch(apiUrl).then(function(response) {
+        return fetch(apiUrl).then(function (response) {
             // Return a promise (after converting the response from JSON to an object)
             return response.json();
-        // Then loop over the object above, and for each object call the add() function to add that Pokemon to our pokemonList array
-        }).then(function(json) {
-            json.results.forEach(function(item) {
+            // Then loop over the object above, and for each object call the add() function to add that Pokemon to our pokemonList array
+        }).then(function (json) {
+            json.results.forEach(function (item) {
                 let pokemon = {
                     name: item.name,
                     detailsUrl: item.url,
@@ -87,8 +91,8 @@ let pokemonRepository = (function() {
             });
             // Hide the loading spinner
             hideLoadingSpinner();
-        // Catch any errors durring the API call
-        }).catch(function(e) {
+            // Catch any errors durring the API call
+        }).catch(function (e) {
             console.error(e);
             // Hide the loading spinner
             hideLoadingSpinner();
@@ -102,17 +106,17 @@ let pokemonRepository = (function() {
         // Store the URL for this Pokmeon's details in a variable
         let url = pokemon.detailsUrl;
         // Make a call to the API using the above URL, returning a promise (after converting the response from JSON to an object)
-        return fetch(url).then(function(response) {
+        return fetch(url).then(function (response) {
             return response.json();
-        // Then add the details that we want (imageUrl, height and types) to this Pokemon
-        }).then(function(details) {
+            // Then add the details that we want (imageUrl, height and types) to this Pokemon
+        }).then(function (details) {
             pokemon.imageUrl = details.sprites.other['official-artwork'].front_default;
             pokemon.height = details.height;
             pokemon.types = details.types;
             // Hide the loading spinner
             hideLoadingModalSpinner();
-        // Catch any errors during the API call
-        }).catch(function(e) {
+            // Catch any errors during the API call
+        }).catch(function (e) {
             console.error(e);
             // Hide the loading spinner
             hideLoadingModalSpinner();
@@ -126,7 +130,7 @@ let pokemonRepository = (function() {
 
         // Create a li with Bootstrap classes for the list group
         let listItem = $('<li class="list-group-item col col-lg-3 border-0"></li>');
-    
+
         // Create a button, set it's inner text to the Pokemon in question, add Bootstrap class for buttons
         let listButton = $(`<button type="button" data-toggle="modal" data-target="#pokemonModal" class="btn btn-block">${pokemon.name}</button>`);
 
@@ -135,7 +139,7 @@ let pokemonRepository = (function() {
         pokemonListElement.append(listItem);
 
         // Add an event listener for the Pokemon's button, which will show details for that Pokemon when clicked (by calling the showDetails function below)
-        listButton.on('click', function() {
+        listButton.on('click', function () {
             showDetails(pokemon);
         });
     }
@@ -143,7 +147,7 @@ let pokemonRepository = (function() {
     // Function for showing the details of each Pokemon when the button for that Pokemon is clicked by showing a modal
     function showDetails(pokemon) {
         // Call the loadDetails function to load Pokemon details from the API, and add this information to the Modal
-        loadDetails(pokemon).then(function() {
+        loadDetails(pokemon).then(function () {
             let modalTitle = $('#pokemon-modal-header');
             let modalBody = $('#pokemon-modal-body');
 
@@ -153,22 +157,22 @@ let pokemonRepository = (function() {
 
             // Show the loading spinner for the modal
             showLoadingModalSpinner();
- 
+
             // Add the Pokemon's name as an h1 element
             let modalName = $(`<h1 class="w-100 text-center">${pokemon.name}</h1>`);
 
             // Add the Pokemon's height as a p element
-            let modalHeight = $(`<p class="text-center">Height: ${(pokemon.height)/10}m</p>`);
+            let modalHeight = $(`<p class="text-center">Height: ${(pokemon.height) / 10}m</p>`);
 
             // Add the Pokemon's types as a p element
             let modalTypes = $(`<p class="text-center">Types: </p>`);
 
             // Loop through the pokemon.types array, then get type.name for the display name of the type
-            pokemon.types.forEach(function(individualType) {
+            pokemon.types.forEach(function (individualType) {
                 // Adding a span here will allow us to change the colour of this type section depending on what type it is
-                typesSpan = $(`<span class="${individualType.type.name} pokemon-type text-center"></span>`);
+                let typesSpan = $(`<span class="${individualType.type.name} pokemon-type text-center"></span>`);
                 // Capitalize the type name
-                capitalType = individualType.type.name.charAt(0).toUpperCase() + individualType.type.name.slice(1);
+                let capitalType = individualType.type.name.charAt(0).toUpperCase() + individualType.type.name.slice(1);
                 // Add the type text to the <span>
                 typesSpan.text(`${capitalType} `);
                 // Add the <span> to the <p> element above
@@ -180,7 +184,7 @@ let pokemonRepository = (function() {
 
             // Add close button for the modal
             let closeButton = $('<button type="button" class="btn-close" data-dismiss="modal" aria-label="close">X</button>');
-            
+
             // Hide the loading modal spinner
             hideLoadingModalSpinner();
 
@@ -220,13 +224,13 @@ let pokemonRepository = (function() {
     // Event listener for search box in navbar
     let pokemonSearch = $('#pokemon-search');
     // On any input into the search box, run the inner function
-    pokemonSearch.on('input', function() {
+    pokemonSearch.on('input', function () {
         // Store values of the list of Pokemon and the search value in the search box
         let listOfPokemon = $('.list-group-item');
         let searchValue = pokemonSearch.val().toLowerCase();
 
         // Loop through the listOfPokemon
-        listOfPokemon.each(function() {
+        listOfPokemon.each(function () {
             // Convert the inner text of each entry (i.e. the name on each button) to a string
             let pokemonEntry = $(this).text()
             // Check to see if searchValue exists in the pokemonEntry string
@@ -253,8 +257,8 @@ let pokemonRepository = (function() {
 
 
 // Loop over the pokemonList array, using the printPokemonList function to write out each Pokemon's details
-pokemonRepository.loadList().then(function() {
-    pokemonRepository.getAll().forEach(function(pokemon) {
+pokemonRepository.loadList().then(function () {
+    pokemonRepository.getAll().forEach(function (pokemon) {
         pokemonRepository.addListItem(pokemon);
     })
 });
