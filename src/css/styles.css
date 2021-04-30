@@ -13,7 +13,7 @@ body {
 	}
 
 	#navbarDropdown {
-		font-size: 9px;
+		white-space: normal;
 	}
 }
 
