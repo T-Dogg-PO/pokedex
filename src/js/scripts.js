@@ -129,7 +129,7 @@ let pokemonRepository = (function () {
         let pokemonListElement = $('#pokemon-list');
 
         // Create a li with Bootstrap classes for the list group
-        let listItem = $('<li class="list-group-item col col-lg-3 border-0"></li>');
+        let listItem = $('<li class="list-group-item col col-lg-3 border-0 m-auto"></li>');
 
         // Create a button, set it's inner text to the Pokemon in question, add Bootstrap class for buttons
         let listButton = $(`<button type="button" data-toggle="modal" data-target="#pokemonModal" class="btn btn-block">${pokemon.name}</button>`);

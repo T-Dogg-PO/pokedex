@@ -18,7 +18,7 @@ body {
     font-family: inherit;
     background-color: #87CEFA;
     text-decoration: none;
-    padding: 10px;
+    padding: auto;
 	margin: auto;
     transition: 0.2s opacity;
 	min-width: 200px;
