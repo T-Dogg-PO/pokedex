@@ -4,16 +4,8 @@ let pokemonRepository = (function () {
     let pokemonList = [];
 
     // Create variable to store the link to the API where we will get data from and variables for filtering by generation
-    let apiUrl = 'https://pokeapi.co/api/v2/pokemon/?limit=151';
-    let apiGen1 = 'https://pokeapi.co/api/v2/pokemon/?limit=151';
-    let apiGen2 = 'https://pokeapi.co/api/v2/pokemon/?limit=100&offset=151';
-    let apiGen3 = 'https://pokeapi.co/api/v2/pokemon/?limit=135&offset=251';
-    let apiGen4 = 'https://pokeapi.co/api/v2/pokemon/?limit=107&offset=386';
-    let apiGen5 = 'https://pokeapi.co/api/v2/pokemon/?limit=156&offset=493';
-    let apiGen6 = 'https://pokeapi.co/api/v2/pokemon/?limit=72&offset=649';
-    let apiGen7 = 'https://pokeapi.co/api/v2/pokemon/?limit=88&offset=721';
-    let apiGen8 = 'https://pokeapi.co/api/v2/pokemon/?limit=89&offset=809';
-    let apiAllGen = 'https://pokeapi.co/api/v2/pokemon/?limit=898';
+    const apiBase = 'https://pokeapi.co/api/v2/pokemon/?limit=';
+    let apiUrl = `${apiBase}151`;
 
     // Change generation function. When called it will reload the list using an updated API link
     function changeGen() {
@@ -33,23 +25,23 @@ let pokemonRepository = (function () {
         previousButton.removeClass('active');
         selectedButton.addClass('active');
         if (selectedID === 'all') {
-            apiUrl = apiAllGen;
+            apiUrl = `${apiBase}898`;
         } else if (selectedID === 'gen1') {
-            apiUrl = apiGen1;
+            apiUrl = `${apiBase}151`;
         } else if (selectedID === 'gen2') {
-            apiUrl = apiGen2;
+            apiUrl = `${apiBase}100&offset=151`;
         } else if (selectedID === 'gen3') {
-            apiUrl = apiGen3;
+            apiUrl = `${apiBase}135&offset=251`;
         } else if (selectedID === 'gen4') {
-            apiUrl = apiGen4;
+            apiUrl = `${apiBase}107&offset=386`;
         } else if (selectedID === 'gen5') {
-            apiUrl = apiGen5;
+            apiUrl = `${apiBase}156&offset=493`;
         } else if (selectedID === 'gen6') {
-            apiUrl = apiGen6;
+            apiUrl = `${apiBase}72&offset=649`;
         } else if (selectedID === 'gen7') {
-            apiUrl = apiGen7;
+            apiUrl = `${apiBase}88&offset=721`;
         } else if (selectedID === 'gen8') {
-            apiUrl = apiGen8;
+            apiUrl = `${apiBase}89&offset=809`;
         }
         // Remove all existing Pokemon buttons from ul
         $('#pokemon-list').children().remove();
