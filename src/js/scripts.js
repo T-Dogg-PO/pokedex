@@ -192,25 +192,25 @@ let pokemonRepository = (function () {
     // Function for showing a loading spinner while waiting for a response from the API
     function showLoadingSpinner() {
         let loadingSpinner = document.querySelector('#loading');
-        loadingSpinner.style.display = 'block';
+        loadingSpinner.classList.add('show-loading-spinner');
     }
 
     // Function for hiding the loading spinner that is displayed in showLoadingMessage()
     function hideLoadingSpinner() {
         let loadingSpinner = document.querySelector('#loading');
-        loadingSpinner.style.display = 'none';
+        loadingSpinner.classList.remove('show-loading-spinner');
     }
 
     // Function for showing a loading spinner while the pop-up modal loads
     function showLoadingModalSpinner() {
         let loadingSpinner = document.querySelector('#loading-modal');
-        loadingSpinner.style.display = 'block';
+        loadingSpinner.classList.add('show-loading-spinner');
     }
 
     // Function for hiding the loading spinner while the pop-up modal loads
     function hideLoadingModalSpinner() {
         let loadingSpinner = document.querySelector('#loading-modal');
-        loadingSpinner.style.display = 'none';
+        loadingSpinner.classList.remove('show-loading-spinner');
     }
 
     // Event listener for search box in navbar

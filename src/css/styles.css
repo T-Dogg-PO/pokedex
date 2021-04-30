@@ -17,8 +17,6 @@ body {
 	}
 }
 
-
-
 /* Styling for the buttons for each individual Pokemon, including opacity change for hovering. Overwriting some of the defaults that Bootstrap comes with */
 .btn {
     font-family: inherit;
@@ -38,6 +36,11 @@ body {
 /* Hiding the loading spinner on page load */
 #loading, #loading-modal {
     display: none;
+}
+
+/* Class for displaying the loading spinner on the page */
+.show-loading-spinner {
+	display: block;
 }
 
 /* Styling for the type icons */
