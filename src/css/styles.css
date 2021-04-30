@@ -13,9 +13,11 @@ body {
 	}
 
 	#navbarDropdown {
-		font-size: 10px;
+		font-size: 9px;
 	}
 }
+
+
 
 /* Styling for the buttons for each individual Pokemon, including opacity change for hovering. Overwriting some of the defaults that Bootstrap comes with */
 .btn {
