@@ -24,6 +24,7 @@ let pokemonRepository = (function () {
         let previousButton = $('.active');
         previousButton.removeClass('active');
         selectedButton.addClass('active');
+        // Switch instead of if-else would be an improvement here in the future
         if (selectedID === 'all') {
             apiUrl = `${apiBase}898`;
         } else if (selectedID === 'gen1') {
@@ -228,6 +229,7 @@ let pokemonRepository = (function () {
             // Check to see if searchValue exists in the pokemonEntry string
             if (pokemonEntry.toLowerCase().indexOf(searchValue) > -1) {
                 // If yes, do nothing to change the display
+                // TODO - use classlistadd instead
                 this.style.display = '';
             } else {
                 // Otherwise, hide this entry on the page

@@ -1,5 +1,16 @@
 # Pokedex
-This website is a Pokedex designed to display a list of Pokemon as buttons. Upon clicking those buttons, a modal will pop up with details about that Pokemon. [The website can be found here](https://t-dogg-po.github.io/pokedex/).
+This website is a Pokedex designed to display a list of Pokemon as buttons. Upon clicking those buttons, a modal will pop up with details about that Pokemon. [The website can be found here, hosted by Github Pages](https://t-dogg-po.github.io/pokedex/).
+
+## Purpose
+The purpose of this website was to get some practice building a website using (mostly) vanilla JavaScript. In addition I explored some features of JQuery and practised interacting with an external API.
+
+## Technologies Used
+* HTML
+* CSS
+* JavaScript
+* JQuery
+* Bootstrap
+* Data obtained from the [PokeAPI](https://pokeapi.co/)
 
 ## Usage
 ### Landing Page
@@ -10,6 +21,3 @@ Click on the 'Select a Generation of Pokemon' button in the navbar to bring up a
 
 ### Search for a Pokemon by Name
 Click on the search box in the top right corner of the page and begin typing out a Pokemon name. The list of Pokemon displayed on the page will change with each keypress to correspond to the search results.
-
-## Technologies Used
-This project was built using vanilla JavaScript (so far at least), and using data from the [PokeAPI](https://pokeapi.co/).
