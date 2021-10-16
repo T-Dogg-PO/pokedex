@@ -1,5 +1,6 @@
 # Pokedex
 This website is a Pokedex designed to display a list of Pokemon as buttons. Upon clicking those buttons, a modal will pop up with details about that Pokemon. [The website can be found here, hosted by Github Pages](https://t-dogg-po.github.io/pokedex/).
+<img src="assets/pokedex.PNG" style="max-width: 100%;">
 
 ## Purpose
 The purpose of this website was to get some practice building a website using (mostly) vanilla JavaScript. In addition I explored some features of JQuery and practised interacting with an external API.
